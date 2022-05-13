@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/WebDevTraining/static/css/main.073c9b0a.css",
+    "main.js": "/WebDevTraining/static/js/main.3cadcb70.js",
+    "static/js/787.6711cc44.chunk.js": "/WebDevTraining/static/js/787.6711cc44.chunk.js",
+    "static/media/logo.svg": "/WebDevTraining/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/WebDevTraining/index.html",
+    "main.073c9b0a.css.map": "/WebDevTraining/static/css/main.073c9b0a.css.map",
+    "main.3cadcb70.js.map": "/WebDevTraining/static/js/main.3cadcb70.js.map",
+    "787.6711cc44.chunk.js.map": "/WebDevTraining/static/js/787.6711cc44.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.3cadcb70.js"
+  ]
+}
