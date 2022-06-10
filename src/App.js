@@ -10,9 +10,38 @@ function App() {
     const [genre, setGenre] = useState("");
     const [year, setYear] = useState("");
 
+
     async function getTrack() {
+        var access_token;
+        var client_id = '2b199a20fc5e449f8d965379c1644014';
+        var client_secret = 'f40c7e472ac24c3c838240c6c7d58c3a';
+        var refresh_token = "Bearer AQCtRYnPNKyMLF7LKh_101lDIPJerNeV2Mm9km50UlJ5cHKG1GYVzeKEzGwwP1xxehNH6HImllJ43QxQXPMrd1u4TPDCfD7Ai8d3RYM1Feh1AriiuhtK1gTcyv1XkjU87us";
+        var authHeaders = new Headers();
+        authHeaders.append('Authorization', 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')));
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            method: 'POST',
+            headers: authHeaders,
+            form: {
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token
+            },
+            json: true
+        };
+
+        const authResponse = await (await fetch(authOptions.url, authOptions)).json();
+        access_token = authResponse['access_token'];
+
+        //     , function(error, response, body) {
+        //     if (!error && response.statusCode === 200) {
+        //         access_token = body.access_token;
+        //     }
+        // });
+
+
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer BQDCatdHit-UbHbqj45nvjbKbPNwRGbxs_3P-xrjb83BPQPHS2WP3MhuCXv18WiP1ybiZxnK903QkooKrB7v2MKJ4F2SsCm6M8MRI1x813Z1k5btu9pqZpfwTKaSeKo5ydPWS8G-pxCOfyBumBRp");
+        myHeaders.append("Authorization", `Bearer ${access_token}`);
+
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -148,16 +177,14 @@ function App() {
         ];
         const genre = genres[Math.floor(Math.random() * genres.length)];
         const year = Math.floor(1900 + Math.random() * 100).toString();
-        const result = await fetch(`https://api.spotify.com/v1/search?q=year:${year}+genre:${genre}&type=track`, requestOptions);
+        const result = await fetch(`https://api.spotify.com/v1/search?q=year:${year}%20genre:${genre}&type=track`, requestOptions);
         const data = await result.json();
         const items = data["tracks"]["items"];
         console.log(items.length);
         if (items.length === 0) {
-            console.log("here");
-            getTrack();
+            return await getTrack();
         }
-        const offset = Math.floor(Math.random() * items.length);
-        const trackObject = items[offset];
+        const trackObject = items[0];
         setTrack(trackObject["name"]);
         setArtist(trackObject["artists"][0]["name"]);
         setUrl(trackObject["external_urls"]["spotify"]);
