@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/WebDevTraining/static/css/main.19339ed7.css",
+    "main.css": "/WebDevTraining/static/css/main.18fcf4d3.css",
     "main.js": "/WebDevTraining/static/js/main.eb24ee00.js",
     "static/js/787.6711cc44.chunk.js": "/WebDevTraining/static/js/787.6711cc44.chunk.js",
     "index.html": "/WebDevTraining/index.html",
-    "main.19339ed7.css.map": "/WebDevTraining/static/css/main.19339ed7.css.map",
+    "main.18fcf4d3.css.map": "/WebDevTraining/static/css/main.18fcf4d3.css.map",
     "main.eb24ee00.js.map": "/WebDevTraining/static/js/main.eb24ee00.js.map",
     "787.6711cc44.chunk.js.map": "/WebDevTraining/static/js/787.6711cc44.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.19339ed7.css",
+    "static/css/main.18fcf4d3.css",
     "static/js/main.eb24ee00.js"
   ]
 }
