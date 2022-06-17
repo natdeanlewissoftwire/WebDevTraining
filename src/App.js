@@ -1,7 +1,7 @@
-import './App.css';
 import { useState } from "react";
 import {Scopes, SpotifyAuth} from "react-spotify-auth";
 import 'react-spotify-auth/dist/index.css'
+import './App.css';
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -197,7 +197,7 @@ function App() {
                     </header>
                 ) : (
                     <SpotifyAuth
-                        redirectUri='http://localhost:3000/callback'
+                        redirectUri='https://natdeanlewissoftwire.github.io/WebDevTraining/'
                         clientID='2b199a20fc5e449f8d965379c1644014'
                         scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
                         onAccessToken={(token) => setToken(token)}
