@@ -1,5 +1,7 @@
 import './App.css';
 import { useState } from "react";
+import {Scopes, SpotifyAuth} from "react-spotify-auth";
+import 'react-spotify-auth/dist/index.css'
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -9,39 +11,15 @@ function App() {
     const [image, setImage] = useState("");
     const [genre, setGenre] = useState("");
     const [year, setYear] = useState("");
+    const [token, setToken] = useState("");
 
 
     async function getTrack() {
-        var access_token;
-        var client_id = '2b199a20fc5e449f8d965379c1644014';
-        var client_secret = 'f40c7e472ac24c3c838240c6c7d58c3a';
-        var refresh_token = "Bearer AQCtRYnPNKyMLF7LKh_101lDIPJerNeV2Mm9km50UlJ5cHKG1GYVzeKEzGwwP1xxehNH6HImllJ43QxQXPMrd1u4TPDCfD7Ai8d3RYM1Feh1AriiuhtK1gTcyv1XkjU87us";
-        var authHeaders = new Headers();
-        authHeaders.append('Authorization', 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')));
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            method: 'POST',
-            headers: authHeaders,
-            form: {
-                grant_type: 'refresh_token',
-                refresh_token: refresh_token
-            },
-            json: true
-        };
-
-        const authResponse = await (await fetch(authOptions.url, authOptions)).json();
-        access_token = authResponse['access_token'];
-
-        //     , function(error, response, body) {
-        //     if (!error && response.statusCode === 200) {
-        //         access_token = body.access_token;
-        //     }
-        // });
-
+        var randomWords = require('random-words');
 
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", `Bearer ${access_token}`);
-
+        myHeaders.append("Authorization", `Bearer ${token}`);
+        console.log(token);
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -176,13 +154,13 @@ function App() {
             "world-music"
         ];
         const genre = genres[Math.floor(Math.random() * genres.length)];
-        const year = Math.floor(1900 + Math.random() * 100).toString();
-        const result = await fetch(`https://api.spotify.com/v1/search?q=year:${year}%20genre:${genre}&type=track`, requestOptions);
+        const year = Math.floor(1922 + Math.random() * 100).toString();
+        const randomWord = randomWords();
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${randomWord}%20genre:${genre}%20&type=track`, requestOptions);
         const data = await result.json();
         const items = data["tracks"]["items"];
-        console.log(items.length);
         if (items.length === 0) {
-            return await getTrack();
+            return getTrack();
         }
         const trackObject = items[0];
         setTrack(trackObject["name"]);
@@ -197,25 +175,35 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Assistant for Random* Spotify Exploration</h1>
-                <button onClick={getTrack}>Get a random* track</button>
-                {isLoading}
-                {!isLoading &&
-                    <div>
+                {token ? (
+                    <header className="App-header">
+                        <h1>Assistant for Random* Spotify Exploration</h1>
+                        <button onClick={getTrack}>Get a random* track</button>
+                        {isLoading}
+                        {!isLoading &&
+                            <div>
 
-                        <h3>Your random* track is:</h3>
-                        <a href={url}>
-                            <p>{track}</p>
-                            <img src={image} width="500" alt={""}/>
-                        </a>
-                        <p>by <b>{artist}</b></p>
+                                <h3>Your random* track is:</h3>
+                                <a href={url}>
+                                    <p>{track}</p>
+                                    <img src={image} width="500" alt={""}/>
+                                </a>
+                                <p>by <b>{artist}</b></p>
 
-                        <p>It's a {genre} track from {year}</p>
-                    </div>
-                }
-                <p>* (ish)</p>
-            </header>
+                                <p>It's a {genre} track from {year}</p>
+                            </div>
+                        }
+                        <p>* (ish)</p>
+                    </header>
+                ) : (
+                    <SpotifyAuth
+                        redirectUri='http://localhost:3000/callback'
+                        clientID='2b199a20fc5e449f8d965379c1644014'
+                        scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
+                        onAccessToken={(token) => setToken(token)}
+                    />
+                )}
+
         </div>
     );
 }
