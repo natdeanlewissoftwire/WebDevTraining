@@ -1,5 +1,7 @@
 import './App.css';
 import { useState } from "react";
+import {Scopes, SpotifyAuth} from "react-spotify-auth";
+import 'react-spotify-auth/dist/index.css'
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -9,10 +11,15 @@ function App() {
     const [image, setImage] = useState("");
     const [genre, setGenre] = useState("");
     const [year, setYear] = useState("");
+    const [token, setToken] = useState("");
+
 
     async function getTrack() {
+        var randomWords = require('random-words');
+
         var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Bearer BQDCatdHit-UbHbqj45nvjbKbPNwRGbxs_3P-xrjb83BPQPHS2WP3MhuCXv18WiP1ybiZxnK903QkooKrB7v2MKJ4F2SsCm6M8MRI1x813Z1k5btu9pqZpfwTKaSeKo5ydPWS8G-pxCOfyBumBRp");
+        myHeaders.append("Authorization", `Bearer ${token}`);
+        console.log(token);
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -147,17 +154,15 @@ function App() {
             "world-music"
         ];
         const genre = genres[Math.floor(Math.random() * genres.length)];
-        const year = Math.floor(1900 + Math.random() * 100).toString();
-        const result = await fetch(`https://api.spotify.com/v1/search?q=year:${year}+genre:${genre}&type=track`, requestOptions);
+        const year = Math.floor(1922 + Math.random() * 100).toString();
+        const randomWord = randomWords();
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${randomWord}%20genre:${genre}%20&type=track`, requestOptions);
         const data = await result.json();
         const items = data["tracks"]["items"];
-        console.log(items.length);
         if (items.length === 0) {
-            console.log("here");
-            getTrack();
+            return getTrack();
         }
-        const offset = Math.floor(Math.random() * items.length);
-        const trackObject = items[offset];
+        const trackObject = items[0];
         setTrack(trackObject["name"]);
         setArtist(trackObject["artists"][0]["name"]);
         setUrl(trackObject["external_urls"]["spotify"]);
@@ -170,25 +175,35 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Assistant for Random* Spotify Exploration</h1>
-                <button onClick={getTrack}>Get a random* track</button>
-                {isLoading}
-                {!isLoading &&
-                    <div>
+                {token ? (
+                    <header className="App-header">
+                        <h1>Assistant for Random* Spotify Exploration</h1>
+                        <button onClick={getTrack}>Get a random* track</button>
+                        {isLoading}
+                        {!isLoading &&
+                            <div>
 
-                        <h3>Your random* track is:</h3>
-                        <a href={url}>
-                            <p>{track}</p>
-                            <img src={image} width="500" alt={""}/>
-                        </a>
-                        <p>by <b>{artist}</b></p>
+                                <h3>Your random* track is:</h3>
+                                <a href={url}>
+                                    <p>{track}</p>
+                                    <img src={image} width="500" alt={""}/>
+                                </a>
+                                <p>by <b>{artist}</b></p>
 
-                        <p>It's a {genre} track from {year}</p>
-                    </div>
-                }
-                <p>* (ish)</p>
-            </header>
+                                <p>It's a {genre} track from {year}</p>
+                            </div>
+                        }
+                        <p>* (ish)</p>
+                    </header>
+                ) : (
+                    <SpotifyAuth
+                        redirectUri='http://localhost:3000/callback'
+                        clientID='2b199a20fc5e449f8d965379c1644014'
+                        scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
+                        onAccessToken={(token) => setToken(token)}
+                    />
+                )}
+
         </div>
     );
 }
