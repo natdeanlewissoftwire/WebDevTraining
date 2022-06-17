@@ -186,7 +186,7 @@ function App() {
                                 <h3>Your random* track is:</h3>
                                 <a href={url}>
                                     <p>{track}</p>
-                                    <img src={image} width="500" alt={""}/>
+                                    <img src={image} height={"auto"} max-width={"100vw"} alt={""}/>
                                 </a>
                                 <p>by <b>{artist}</b></p>
 
