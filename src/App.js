@@ -186,7 +186,7 @@ function App() {
                                 <h3>Your random* track is:</h3>
                                 <a href={url}>
                                     <p>{track}</p>
-                                    <img src={image} height={"auto"} max-width={"100vw"} alt={""}/>
+                                    <img src={image} alt={""}/>
                                 </a>
                                 <p>by <b>{artist}</b></p>
 
@@ -197,7 +197,7 @@ function App() {
                     </header>
                 ) : (
                     <SpotifyAuth
-                        redirectUri='https://natdeanlewissoftwire.github.io/WebDevTraining/'
+                        redirectUri='https://natdeanlewissoftwire.github.io/WebDevTraining'
                         clientID='2b199a20fc5e449f8d965379c1644014'
                         scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
                         onAccessToken={(token) => setToken(token)}
