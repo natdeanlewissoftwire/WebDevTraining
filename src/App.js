@@ -13,13 +13,13 @@ function App() {
     const [year, setYear] = useState("");
     const [token, setToken] = useState("");
 
-
+    if (isLoading) {
+        document.body.style.backgroundColor = "black";
+    }
     async function getTrack() {
         var randomWords = require('random-words');
-
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
-        console.log(token);
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -171,6 +171,9 @@ function App() {
         setGenre(genre);
         setYear(trackObject["album"]["release_date"].substring(0, 4));
         console.log(genre, year, trackObject);
+        var randomNumber = Math.random()*16777215;
+        var randomColor = Math.floor(randomNumber).toString(16);
+        document.body.style.backgroundColor = "#" + randomColor;
     }
 
     return (
@@ -184,13 +187,13 @@ function App() {
                             <div>
 
                                 <h3>Your random* track is:</h3>
-                                <a href={url}>
+                                <a href={url} target={"_blank"}>
                                     <p>{track}</p>
                                     <img src={image} alt={""}/>
                                 </a>
                                 <p>by <b>{artist}</b></p>
 
-                                <p>It's a {genre} track from {year}</p>
+                                <p>It's a{['a', 'e', 'i', 'o', 'u'].includes(Array.from(genre)[0]) ? 'n' : ''} {genre} track from {year}</p>
                             </div>
                         }
                         <p>* (ish)</p>
