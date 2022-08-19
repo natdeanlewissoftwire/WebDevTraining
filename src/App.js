@@ -1,7 +1,7 @@
-import './App.css';
 import { useState } from "react";
 import {Scopes, SpotifyAuth} from "react-spotify-auth";
 import 'react-spotify-auth/dist/index.css'
+import './App.css';
 
 function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,13 +13,13 @@ function App() {
     const [year, setYear] = useState("");
     const [token, setToken] = useState("");
 
-
+    if (isLoading) {
+        document.body.style.backgroundColor = "black";
+    }
     async function getTrack() {
         var randomWords = require('random-words');
-
         var myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
-        console.log(token);
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -171,6 +171,9 @@ function App() {
         setGenre(genre);
         setYear(trackObject["album"]["release_date"].substring(0, 4));
         console.log(genre, year, trackObject);
+        var randomNumber = Math.random()*16777215;
+        var randomColor = Math.floor(randomNumber).toString(16);
+        document.body.style.backgroundColor = "#" + randomColor;
     }
 
     return (
@@ -184,20 +187,20 @@ function App() {
                             <div>
 
                                 <h3>Your random* track is:</h3>
-                                <a href={url}>
+                                <a href={url} target={"_blank"}>
                                     <p>{track}</p>
-                                    <img src={image} width="500" alt={""}/>
+                                    <img src={image} alt={""}/>
                                 </a>
                                 <p>by <b>{artist}</b></p>
 
-                                <p>It's a {genre} track from {year}</p>
+                                <p>It's a{['a', 'e', 'i', 'o', 'u'].includes(Array.from(genre)[0]) ? 'n' : ''} {genre} track from {year}</p>
                             </div>
                         }
                         <p>* (ish)</p>
                     </header>
                 ) : (
                     <SpotifyAuth
-                        redirectUri='http://localhost:3000/callback'
+                        redirectUri='https://natdeanlewissoftwire.github.io/WebDevTraining'
                         clientID='2b199a20fc5e449f8d965379c1644014'
                         scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
                         onAccessToken={(token) => setToken(token)}
